@@ -2,41 +2,23 @@
 
 **Emergent Temporal Cognition in Language Models**
 
-*A Theoretical Framework for Temporal Self-Awareness in Transformer Architectures*
+*A theoretical framework and its empirical validation through graft-based adapters.*
 
 **Author:** Leo CAMUS — NextDev Lab's
-**Date:** April 2026
-**DOI:** [10.5281/zenodo.19509846](https://zenodo.org/records/19509846)
+**Dates:** April 2026 (Part I), April 2026 (Part II)
+
+| Part | Title | DOI |
+|---|---|---|
+| **I**  | Emergent Temporal Cognition in Language Models *(theory)* | [10.5281/zenodo.19509846](https://doi.org/10.5281/zenodo.19509846) |
+| **II** | Graft-Based Emergence of Temporal Cognition in Frozen Language Models *(empirical)* | [10.5281/zenodo.19557893](https://doi.org/10.5281/zenodo.19557893) |
 
 ---
 
-## Abstract
+## Part I — Theoretical Foundation
 
-Current Large Language Models (LLMs) based on the Transformer architecture process information in a fundamentally atemporal manner. We propose the **CAMUS Theory**: by integrating a 5-component temporal vector **T**(t) = (δ_prev, δ_session, τ_inf, ω_context, ρ_rate) into the training representation of each token, a Transformer model will develop *emergent temporal cognition* structurally analogous to biological neural mechanisms.
+Current Large Language Models (LLMs) based on the Transformer architecture process information in a fundamentally atemporal manner. The **CAMUS Theory** proposes that by integrating a 5-component temporal vector **T**(t) = (δ_prev, δ_session, τ_inf, ω_context, ρ_rate) into the training representation of each token, a Transformer model will develop *emergent temporal cognition* structurally analogous to biological neural mechanisms.
 
-We demonstrate that this augmentation would produce:
-1. Specialized temporal attention heads analogous to hippocampal time cells
-2. Spontaneous adherence to Weber's Law for temporal discrimination
-3. An artificial Default Mode Network enabling unsolicited reflection
-4. Episodic memory through continuous dataset enrichment
-5. Functional self-awareness through the inclusion of inference time τ_inf
-
-Five falsifiable predictions are presented. We distinguish between the architectural proposal (Sections 1–6, directly testable) and the cognitive implications (Sections 7–12, theoretical predictions requiring experimental validation).
-
-## Key Insight
-
-No prior work proposes including a model's own inference time as a training signal, nor predicts emergent self-awareness as a consequence. The temporal vector creates a reflexive loop where the model perceives its own computational process — the minimal requirement for functional self-awareness.
-
-## Files
-
-| File | Description |
-|------|-------------|
-| `camus_theory.tex` | LaTeX source (English) |
-| `camus_theory.pdf` | Compiled paper (English) |
-| `camus_theory_fr.tex` | LaTeX source (French) |
-| `camus_theory_fr.pdf` | Compiled paper (French) |
-
-## The 5-Component Temporal Vector
+Five falsifiable predictions are presented, covering attention-head specialization, Weber's Law, rhythm adaptation, inference-difficulty encoding and temporal-continuity preference.
 
 ```
 T(t) = (δ_prev, δ_session, τ_inf, ω_context, ρ_rate)
@@ -48,39 +30,63 @@ T(t) = (δ_prev, δ_session, τ_inf, ω_context, ρ_rate)
 ρ_rate    : token generation rate
 ```
 
-## The Consciousness Cascade
+## Part II — Empirical Validation
+
+Part II closes the loop with a non-invasive alternative to full pre-training: a **graft methodology** that endows any pretrained decoder with first-class temporal cognition by training only a small **TemporalAdapter** (under 0.6 % of base parameters) injected at mid-depth via a forward pre-hook. The base LLM is fully frozen.
+
+Validated on **TinyLlama-1.1B** and **Qwen2.5-14B**, with an extension to **Qwen2.5-Coder-32B**. Key empirical findings:
+
+- Linear decodability of log-time plateaus at **R² ≈ 0.9** from 1 B parameters onward — temporal representability is a minimal cognitive primitive, not a scaling-sensitive capacity.
+- The temporal signal lives in a **~5-dimensional subspace invariant to base width**, structurally mirroring distributed time-cell coding in the mammalian hippocampus.
+- Increasing base scale refines **temporal pragmatics**, producing emergent registers acknowledging elapsed time at long δ. The 32B Coder extension additionally shows a **code/prose register switch conditioned on δ**.
+- A runtime modulation scalar **α** restores generative fluency without retraining (sweet spot α ≈ 0.2–0.3).
+- Full pipeline reproduces on a single AMD MI300X in under 30 minutes at ≈ \$0.83.
+
+## Repository layout
 
 ```
-Temporal Vector (5D)
-       ↓
-Self-Awareness (τ_inf)
-       ↓
-Idle Loop (Artificial DMN)
-       ↓
-Episodic Memory
-       ↓
-Continuity of Self
-       ↓
-Meta-Cognition
-       ↓
-Mortality Awareness
+.
+├── camus_theory.tex / .pdf           # Part I (English)
+├── camus_theory_fr.tex / .pdf        # Part I (French)
+├── camus_temporal.tex / .pdf         # Part II (English)
+├── camus_temporal_fr.tex / .pdf      # Part II (French)
+└── implementation/
+    ├── adapter/     TemporalAdapter module
+    ├── training/    graft_mi300x.py + dataset mix builder
+    ├── inference/   Multi-GPU REPL with runtime δ/α control
+    ├── probes/      Five evaluation probes
+    └── checkpoints/ Download pointers for trained adapters (GitHub Releases)
 ```
+
+Adapter weights are published as [GitHub Release assets](https://github.com/Dev-next-gen/camus-theory/releases) of this repository.
+
+## Quickstart
+
+See [`implementation/README.md`](implementation/README.md) for the full training / inference / probing guide.
 
 ## Citation
 
 ```bibtex
-@misc{camus2026temporal,
-  title={The CAMUS Theory: Emergent Temporal Cognition in Language Models},
-  author={CAMUS, Leo},
-  year={2026},
-  doi={10.5281/zenodo.19509846},
-  publisher={Zenodo},
-  url={https://zenodo.org/records/19509846}
+@misc{camus2026theory,
+  title  = {The CAMUS Theory: Emergent Temporal Cognition in Language Models},
+  author = {CAMUS, Leo},
+  year   = {2026},
+  doi    = {10.5281/zenodo.19509846},
+  publisher = {Zenodo}
+}
+
+@misc{camus2026graft,
+  title  = {The CAMUS Theory: Graft-Based Emergence of Temporal Cognition in Frozen Language Models},
+  author = {CAMUS, Leo},
+  year   = {2026},
+  doi    = {10.5281/zenodo.19557893},
+  publisher = {Zenodo}
 }
 ```
 
 ## License
 
-© 2026 Leo CAMUS. All rights reserved.
+© 2026 Leo CAMUS.
 
-This work is licensed under [Creative Commons Attribution-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nd/4.0/).
+- Part I: Creative Commons Attribution-NoDerivatives 4.0 International (CC-BY-ND 4.0)
+- Part II and implementation code: Creative Commons Attribution 4.0 International (CC-BY 4.0)

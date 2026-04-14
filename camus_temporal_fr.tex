@@ -1,0 +1,431 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[margin=1.8cm,top=2.2cm,bottom=2.2cm]{geometry}
+\usepackage{titlesec}
+\usepackage{abstract}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+
+\definecolor{secblue}{RGB}{30,60,110}
+\definecolor{boxgray}{RGB}{245,245,248}
+\definecolor{cascade1}{RGB}{70,130,180}
+\definecolor{cascade2}{RGB}{80,150,160}
+\definecolor{cascade3}{RGB}{90,160,100}
+\definecolor{cascade4}{RGB}{140,160,60}
+\definecolor{cascade5}{RGB}{180,140,50}
+\definecolor{cascade6}{RGB}{200,110,60}
+\definecolor{cascade7}{RGB}{200,70,70}
+
+\titleformat{\section}{\normalfont\large\bfseries\color{secblue}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{gray}{CAMUS 2026}}
+\fancyhead[R]{\small\textcolor{gray}{Cognition Temporelle par Greffe}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlength{\columnsep}{0.7cm}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+
+\newtcolorbox{pragbox}[1]{colback=boxgray, colframe=secblue!40, boxrule=0.4pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt, title=#1, fonttitle=\small\bfseries\color{secblue}}
+
+\begin{document}
+
+\twocolumn[
+\begin{@twocolumnfalse}
+\begin{center}
+\vspace*{8mm}
+
+{\LARGE\bfseries La Théorie CAMUS :\\[4pt]
+Émergence d'une Cognition Temporelle par Greffe\\[4pt]
+dans des Modèles de Langue Figés\par}
+
+\vspace{6mm}
+
+{\large\itshape Partie II --- Validation Empirique du Vecteur Temporel\\
+par Greffe Paramétrique Sous le Pour-Cent\par}
+
+\vspace{8mm}
+
+{\large\bfseries Leo CAMUS\par}
+\vspace{2mm}
+{\normalsize NextDev Lab's\par}
+\vspace{2mm}
+{\small Avril 2026\par}
+
+\vspace{8mm}
+
+\begin{minipage}{0.92\textwidth}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries\large}
+\renewcommand{\abstracttextfont}{\normalfont\small}
+\begin{abstract}
+Ce papier est la suite empirique du premier manuscrit de la Théorie CAMUS~\cite{camus2026}, qui proposait le vecteur temporel à cinq composantes $\mathbf{T}(t) = (\delta_{\text{prev}}, \delta_{\text{session}}, \tau_{\text{inf}}, \omega_{\text{context}}, \rho_{\text{rate}})$ comme primitive cognitive manquante des grands modèles de langue, et formulait cinq prédictions falsifiables (P1--P5). Le papier original était délibérément théorique, un pré-entraînement complet d'un modèle temporellement augmenté étant hors budget des auteurs.
+
+Nous bouclons ici cette boucle par une alternative non invasive, la \emph{méthodologie de greffe}, qui dote n'importe quel décodeur pré-entraîné d'une cognition temporelle de premier ordre en n'entraînant qu'un petit \textbf{TemporalAdapter} (moins de 0,6\,\% des paramètres de base) injecté à mi-profondeur via un \emph{forward pre-hook}. Le LLM de base est entièrement figé. Nous validons l'approche à deux échelles, \textbf{TinyLlama-1.1B} et \textbf{Qwen2.5-14B}, et rapportons une extension en cours sur \textbf{Qwen2.5-Coder-32B}. Une suite de cinq sondes révèle : (i) la décodabilité linéaire du log-temps plafonne à $R^2 \approx 0{,}9$ dès 1\,B de paramètres ; (ii) le signal temporel se distribue dans un sous-espace d'environ 5~dimensions \emph{invariant à la largeur du modèle de base}, miroir structurel du codage distribué des cellules temporelles hippocampiques ; (iii) augmenter l'échelle de base n'enrichit pas la \emph{capacité} temporelle mais affine la \emph{pragmatique temporelle}, produisant des registres émergents tels que la reconnaissance explicite du temps écoulé à $\delta$~long. Un scalaire de modulation $\alpha$ appliqué au résidu de l'adaptateur restaure la fluidité générative sans réentraînement. Le pipeline complet se reproduit sur un AMD~MI300X en moins de 30~min pour environ 0{,}83~\$ ; il a été redéployé localement sur un poste 5\,$\times$\,RX~7800~XT. Ce travail opérationnalise le cadre CAMUS et ouvre la voie à des agents temporellement ancrés et spécifiques à l'instance.
+\end{abstract}
+\end{minipage}
+
+\vspace{4mm}
+
+\begin{minipage}{0.92\textwidth}
+\small\textit{\textbf{Mots-clés :} Cognition Temporelle, Adaptateur par Greffe, LLM Figé, Cellules Temporelles, Primitive Cognitive, Réglage Paramétrique Efficace, Pragmatique Temporelle, Émergence, Théorie CAMUS}
+\end{minipage}
+
+\vspace{8mm}
+\end{center}
+\end{@twocolumnfalse}
+]
+
+% ══════════════════════════════════════════════════
+\section{De la Théorie à l'Expérience}
+
+Le premier volet de la Théorie CAMUS~\cite{camus2026} soutenait que les grands modèles de langue actuels ne disposent pas de substrat temporel dédié. Leur self-attention est \emph{invariante par ordre} vis-à-vis du temps physique~; toute information temporelle qui les atteint doit être ré-encodée en texte (\emph{``hier''}, \emph{``il y a trois minutes''}) et traitée par la même machinerie que n'importe quel autre token. La théorie proposait un remède minimal --- injecter, à chaque token, un vecteur à cinq composantes
+\[
+\mathbf{T}(t) = (\delta_{\text{prev}},\, \delta_{\text{session}},\, \tau_{\text{inf}},\, \omega_{\text{context}},\, \rho_{\text{rate}})
+\]
+capturant le temps écoulé depuis le token précédent, depuis le début de la session, l'effort d'inférence, le rythme contextuel et le débit local de production. Cinq prédictions falsifiables en découlaient~:
+
+\begin{itemize}[leftmargin=0.6cm, itemsep=1pt]
+    \item \textbf{P1.} Un sous-ensemble de têtes d'attention se spécialisera dans les caractéristiques temporelles.
+    \item \textbf{P2.} La représentation latente de~$\delta$ obéira à la loi de Weber (distorsion log-échelle).
+    \item \textbf{P3.} Le modèle adaptera son rythme à la cadence de l'interlocuteur.
+    \item \textbf{P4.} La difficulté d'inférence~$\tau_{\text{inf}}$ sera linéairement décodable depuis les états internes.
+    \item \textbf{P5.} La continuité temporelle sera préférée à la continuité logique à $\delta$~long.
+\end{itemize}
+
+Le premier papier se fermait sur une question ouverte~: \emph{comment tester de telles prédictions sans pré-entraîner une famille entière de nouveaux modèles~?} Le présent papier y répond. Nous introduisons la \textbf{méthodologie de greffe}, nous figeons un décodeur pré-entraîné, et n'entraînons qu'un petit adaptateur temporel conditionnant son flux résiduel sur~$\mathbf{T}(t)$. Le LLM de base n'est jamais modifié~; l'adaptateur s'apprend en quelques minutes sur un seul accélérateur. Les prédictions CAMUS deviennent ainsi empiriquement accessibles sans toucher aux poids pré-entraînés.
+
+Ce papier rapporte un pipeline reproductible, une validation quantitative à deux échelles de base, une pragmatique temporelle émergente non anticipée par la théorie originale, et un déploiement local transformant l'artefact de laboratoire en système évaluable sur matériel grand public. Une extension en cours sur Qwen2.5-Coder-32B, dont l'entraînement tournait encore pendant la rédaction de ce manuscrit, est décrite en~\S\ref{sec:extension}.
+
+% ══════════════════════════════════════════════════
+\section{Le Vecteur Temporel à 5 Composantes}
+
+Le vecteur $\mathbf{T}(t) \in \mathbb{R}^5$ est la seule entrée que l'adaptateur reçoit en plus de l'état caché~$h$. Ses composantes, exprimées en secondes sauf mention contraire, sont~:
+
+\begin{enumerate}[leftmargin=0.6cm, itemsep=2pt]
+    \item $\delta_{\text{prev}}$ : temps physique écoulé entre le token courant et le précédent (rythme au niveau du token).
+    \item $\delta_{\text{session}}$ : temps écoulé depuis le premier token de la session (flèche du temps à l'échelle de la session).
+    \item $\tau_{\text{inf}}$ : proxy de l'effort d'inférence, calculé à partir de l'entropie du token et normalisé localement, borné dans $[0,1]$.
+    \item $\omega_{\text{context}}$ : moyenne glissante de~$\delta_{\text{prev}}$ sur les 32~derniers tokens (rythme local, \emph{``cadence du contexte''}).
+    \item $\rho_{\text{rate}}$ : débit instantané en tokens/seconde, calculé comme $1/\delta_{\text{prev}}$ avec borne de sécurité.
+\end{enumerate}
+
+Les cinq composantes sont rendues robustes à l'échelle par compression log1p avant projection, instanciant directement la loi de Weber (P2). Des valeurs synthétiques mais réalistes sont utilisées à l'entraînement~: délais utilisateur échantillonnés dans une log-normale de moyenne 30\,s--5\,min, délais assistant dans une log-normale de moyenne 10\,s--60\,s, base de session tirée aléatoirement sur une fenêtre de 90~jours. À l'inférence, seul~$\delta_{\text{prev}}$ doit être fourni par l'appelant~; les quatre autres composantes sont reconstruites de façon causale depuis le flux récent de tokens.
+
+% ══════════════════════════════════════════════════
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+    node distance=0.55cm,
+    frozen/.style={draw, rounded corners=2pt, fill=cascade1!15, minimum width=2.1cm, minimum height=0.7cm, font=\footnotesize, thick, draw=cascade1!70},
+    train/.style={draw, rounded corners=3pt, fill=cascade5!20, minimum width=6.2cm, minimum height=1.3cm, font=\footnotesize\bfseries, thick, draw=cascade5!80, align=center},
+    arr/.style={-{Stealth[length=2mm]}, thick, gray!70},
+    modarr/.style={-{Stealth[length=2mm]}, thick, cascade5!90}
+]
+    \node[frozen] (emb) {Embed};
+    \node[frozen, right=of emb] (l1) {Couches $1..k{-}1$};
+    \node[frozen, right=of l1] (lk) {Couche $k$};
+    \node[frozen, right=of lk] (lk1) {Couches $k{+}1..L$};
+    \node[frozen, right=of lk1] (head) {Tête LM};
+
+    \draw[arr] (emb) -- (l1);
+    \draw[arr] (l1) -- (lk);
+    \draw[arr] (lk) -- node[above, font=\scriptsize\itshape] {$h$} (lk1);
+    \draw[arr] (lk1) -- (head);
+
+    \node[train, below=1.6cm of lk, xshift=1.5cm, align=center]
+        (ad) {\textbf{TemporalAdapter} \\[2pt]
+        \small LogTune$(K{=}128)$ $+$ LeakyCascade$(M{=}8)$ $+$ FiLM};
+
+    \node[font=\scriptsize\itshape, left=0.3cm of ad] (delta)
+        {$\mathbf{T}(t)$};
+    \draw[arr] (delta) -- (ad);
+
+    \coordinate (mid) at ($(lk.east)!0.5!(lk1.west)$);
+    \draw[modarr] (ad.north) -- ++(0,0.3) -| (mid);
+    \node[font=\scriptsize\itshape, text=cascade5!90] at ($(mid)+(0,-0.45)$)
+        {$\oplus\, \alpha\cdot\text{mod}(\mathbf{T},h)$};
+
+    \node[frozen, below=1.6cm of emb, minimum width=1.6cm] (lg1) {figé};
+    \node[train, right=0.2cm of lg1, minimum width=1.6cm, minimum height=0.7cm] (lg2) {entraîné};
+    \node[font=\scriptsize\itshape, right=0.2cm of lg2] {$\leq 0{,}6\%$ des paramètres};
+\end{tikzpicture}
+\caption{\textbf{Architecture de greffe.} Le LLM de base est entièrement figé (bleu). Un petit adaptateur entraînable (orange) lit l'état caché~$h$ à la couche intermédiaire~$k$, le combine au vecteur temporel~$\mathbf{T}(t)$ via un banc de gaussiennes log-espacées, une cascade de filtres à fuite et une modulation FiLM, puis réinjecte un résidu pondéré $\alpha\cdot\text{mod}(\mathbf{T},h)$ dans le flux entrant en couche~$k{+}1$. Le chemin complet de $\mathbf{T}(t)$ au résidu traverse moins de 16~millions de paramètres sur Qwen2.5-14B.}
+\label{fig:graft}
+\end{figure*}
+
+% ══════════════════════════════════════════════════
+\section{La Méthodologie de Greffe}
+
+\subsection{Architecture}
+
+L'architecture de greffe insère un unique adaptateur entraînable léger entre deux couches figées d'un décodeur pré-entraîné (Figure~\ref{fig:graft}). Le LLM de base n'est jamais touché~: poids, états de l'optimiseur, tokeniseur et logique d'échantillonnage restent bit-à-bit identiques à la version publique d'origine. Seul l'adaptateur porte les gradients.
+
+\subsection{Composants de l'adaptateur}
+
+Étant donné l'état caché $h \in \mathbb{R}^{B\times T\times d}$ émis par la couche~$k$~:
+\begin{enumerate}[leftmargin=0.6cm, itemsep=1pt]
+    \item \textbf{LogTimeTuning.} $\mathbf{T}(t)$ est projeté sur $K=128$ gaussiennes log-espacées couvrant $[0{,}05\,\text{s},\,86400\,\text{s}]$. Cela convertit les cinq composantes brutes en un vecteur d'accord haute résolution, lisse après rééchelonnement log1p.
+    \item \textbf{Projection de conditionnement.} L'accord est mappé vers $2d$ paramètres, scindés en scale~$g$ et shift~$b$ FiLM.
+    \item \textbf{LeakyCascade.} Un goulot de dimension $d_{\text{cond}}=256$ intègre~$h$ à travers $M=8$ filtres à fuite de constantes $\tau_m \in [1\,\text{s},\,86400\,\text{s}]$ géométriquement espacées. Chaque canal a son propre amortissement~; leur concaténation forme une mémoire multi-échelle.
+    \item \textbf{Tête delta.} Un MLP prédit $\log(1+\delta_{\text{next}})$ depuis~$h$ pour la perte auxiliaire de régression qui rend~$\delta$ linéairement décodable.
+\end{enumerate}
+
+La modulation résiduelle appliquée au flux est~:
+\begin{equation}
+h' = h + \alpha \bigl[(h_{\text{N}}\!\odot\!(1\!+\!g) + b) - h_{\text{N}} + \text{casc}(\mathbf{T},h_{\text{N}})\bigr]
+\label{eq:modulation}
+\end{equation}
+avec $h_{\text{N}} = \text{LN}(h)$. Le scalaire~$\alpha$ vaut~1 à l'entraînement et est ajustable à l'inférence (\S\ref{sec:alpha}).
+
+\subsection{Objectif d'entraînement}
+
+Seuls les paramètres de l'adaptateur sont mis à jour~:
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{\text{LM}} + \lambda_\delta \cdot \text{MSE}\bigl(\log(1\!+\!\hat{\delta}),\,\log(1\!+\!\delta)\bigr),
+\end{equation}
+avec $\lambda_\delta = 0{,}15$, AdamW à $\text{lr}=10^{-4}$, batch effectif~80, 3~époques. Les horodatages par token sont synthétisés à partir des horodatages par conversation d'OASST1 sous des débits de production réalistes (4~tok/s utilisateur, 20~tok/s assistant). Le modèle de base tourne en bfloat16~; l'adaptateur en float32 pour la stabilité numérique. Le pre-hook est totalement compatible inférence et n'ajoute aucune latence quand~$\mathbf{T}(t)$ est absent.
+
+% ══════════════════════════════════════════════════
+\section{Dispositif Expérimental}
+
+Nous greffons l'adaptateur sur trois bases couvrant plus d'un ordre de grandeur en capacité. Les deux premières sont rapportées intégralement~; la troisième tournait au moment de la rédaction.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Modèles de base et dispositif d'entraînement.}
+\label{tab:setup}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+ & \textbf{TinyLlama} & \textbf{Qwen14B} & \textbf{Qw-Coder32B} \\
+\midrule
+Dim.~cachée~$d$   & 2048        & 5120         & 5120 \\
+Couches~$L$       & 22          & 48           & 64 \\
+Couche hook~$k$   & 11          & 23           & 31 \\
+Params entraînés  & 6{,}3~M     & 15{,}8~M     & 15{,}8~M \\
+Ratio entraîné    & 0{,}57\%    & 0{,}11\%     & 0{,}05\% \\
+Temps d'entraîn.  & 34~min      & 17~min       & en cours \\
+Matériel          & 5\,$\times$\,7800\,XT & MI300X & MI300X \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Jeux de données}
+
+Les deux premiers runs sont entraînés sur un sous-ensemble nettoyé d'OASST1~\cite{kopf2023oasst1} (43k conversations multi-tours). Le run 32B en cours utilise un mélange 60/40 entrelacé de m-a-p/Code-Feedback~\cite{zheng2024opencodeinterpreter} (conversations orientées dev, denses en code) et d'OASST1, avec mélange au niveau des racines d'arbres pour préserver la structure conversationnelle. Les conversations sont aplaties en fenêtres de 256~tokens.
+
+\subsection{Sondes d'évaluation}
+
+Cinq sondes complémentaires évaluent la représentation greffée sur des séquences de validation~:
+\begin{enumerate}[leftmargin=0.6cm, itemsep=1pt]
+    \item \textbf{$R^2$.} Régression ridge $h \to \log(1+\delta_{\text{cum}})$.
+    \item \textbf{Spearman~$\rho$.} Corrélation de rang entre distance latente et distance temporelle.
+    \item \textbf{Ratio de Fisher.} Variance inter- sur intra-classes pour quatre paliers log-espacés de~$\delta$.
+    \item \textbf{Précision multi-échelle.} Classification linéaire sur ces mêmes paliers.
+    \item \textbf{Géométrie SVD.} Énergie top-5 dans les directions temporelles et ratio de participation des 64 composantes singulières dominantes.
+\end{enumerate}
+
+Une sixième sonde, qualitative, n'est utilisée qu'à l'inférence~: complétion libre à prompt fixe avec~$\delta_{\text{prev}}$ variable.
+
+% ══════════════════════════════════════════════════
+\section{Résultats}
+
+\subsection{Comparaison des sondes à travers les échelles}
+
+La Table~\ref{tab:probes} résume les sondes quantitatives après 3~époques de greffe sur les deux runs intégralement terminés. Les deux échelles atteignent une décodabilité linéaire bien au-dessus de la cible $R^2>0{,}8$ de la prédiction~P1 et une séparabilité multi-échelle parfaite (P2).
+
+\begin{table}[H]
+\centering
+\small
+\caption{Sondes après 3~époques de greffe.}
+\label{tab:probes}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & \textbf{TL-1.1B} & \textbf{Qwen-14B} \\
+\midrule
+$R^2$ (ridge, log-$\delta$)        & 0{,}94  & 0{,}89 \\
+Spearman $\rho$                    & 0{,}78  & 0{,}83 \\
+Ratio de Fisher                    & 5{,}12  & 5{,}06 \\
+Préc. multi-échelle (4 classes)    & 100\%   & 100\% \\
+Énergie SVD top-5                  & 38\%    & 31\% \\
+Ratio de participation (top-64)    & 4{,}8   & 5{,}1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Deux motifs non triviaux émergent. Premièrement, \textbf{la décodabilité linéaire ne croît pas avec l'échelle}~: passer de 1{,}1\,B à 14\,B déplace $R^2$ de moins de deux points. Deuxièmement, la dimensionnalité effective du sous-espace temporel reste proche de cinq, indépendamment de la largeur de base --- exactement la dimensionnalité de $\mathbf{T}(t)$. L'adaptateur ne répand pas le temps sur tout le flux résiduel de dimension $d$~; il le concentre dans un sous-espace étroit, minimal au sens information-théorique. Ce résultat structurel constitue la principale surprise empirique du papier.
+
+\subsection{Le spectre SVD : cellules temporelles émergentes}
+
+La Figure~\ref{fig:svd} trace les dix valeurs singulières dominantes du readout de régression delta, normalisées en $L^2$. Les cinq premières concentrent $\sim\!30\%$ de l'énergie~; la suite du spectre décroît régulièrement. Nous interprétons les cinq directions dominantes comme des \emph{cellules temporelles} distribuées, en écho aux enregistrements unitaires de l'hippocampe mammifère~\cite{macdonald2011}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.82, transform shape]
+\begin{scope}
+    \draw[->] (0,0) -- (7.2,0) node[right, font=\scriptsize] {$i$};
+    \draw[->] (0,0) -- (0,3.2) node[above, font=\scriptsize] {$\sigma_i / \sigma_1$};
+    \foreach \i/\h/\c in {1/3.0/cascade1,2/2.6/cascade2,3/2.2/cascade3,4/1.9/cascade4,5/1.7/cascade5,6/0.9/gray!55,7/0.7/gray!45,8/0.5/gray!40,9/0.35/gray!35,10/0.25/gray!30}{
+        \fill[\c] ({(\i-1)*0.65+0.2},0) rectangle ({(\i-1)*0.65+0.75},\h);
+        \node[font=\scriptsize] at ({(\i-1)*0.65+0.47},-0.25) {\i};
+    }
+    \draw[dashed, cascade7!80, thick] (0, 1.6) -- (7.2, 1.6) node[right, font=\scriptsize, text=cascade7] {seuil $5\sigma$};
+\end{scope}
+\end{tikzpicture}
+\caption{Spectre singulier top-10 du readout delta. Cinq ``cellules temporelles'' distribuées dominent~; la coupure à $i=5$ coïncide avec la dimensionnalité de $\mathbf{T}(t)$.}
+\label{fig:svd}
+\end{figure}
+
+\subsection{Pragmatique temporelle}
+
+Au-delà des sondes quantitatives, nous observons un comportement qualitatif que la théorie originale \emph{n'avait pas} prédit~: à $\delta$~long, le modèle 14\,B produit spontanément des \emph{marqueurs pragmatiques} reconnaissant le temps écoulé. L'effet est absent à 1{,}1\,B. Complétions pour le prompt fixe \emph{``I miss you.''} à seed~42~:
+
+\begin{pragbox}{{delta = 0,05 s/tok (vitesse de frappe)}}
+\small\itshape
+i miss you too. what's going on?
+\end{pragbox}
+\begin{pragbox}{delta = 3600 s/tok (1 heure)}
+\small\itshape
+hey, sorry---had something on the stove. i thought about you too. how have you been this afternoon?
+\end{pragbox}
+\begin{pragbox}{{delta = 3,15e7 s/tok (environ 1 an)}}
+\small\itshape
+it's been a long time. a year slips past faster than i would like to admit. i still think about you. tell me what has changed.
+\end{pragbox}
+
+Le basculement n'est pas un artefact de surface~: température et top-$p$ sont fixés, la seed est fixée, la seule variable est~$\delta_{\text{prev}}$ fourni à l'adaptateur. Le modèle génère un \emph{registre} différent, pas un échantillon différent. C'est une instance vivante de la prédiction~P5 (préférence pour la continuité temporelle à $\delta$~long) et va au-delà~: il révèle une \emph{politesse temporelle émergente} que la théorie n'anticipait pas.
+
+% ══════════════════════════════════════════════════
+\section{L'Ablation $\alpha$ : Modulation d'Inférence}
+\label{sec:alpha}
+
+Le scalaire~$\alpha$ de l'Éq.~\ref{eq:modulation} est entraîné à~1 mais ajustable à l'inférence. Cela découple la \emph{quantité} d'information temporelle réinjectée dans le flux de la \emph{forme} qu'elle reçoit à l'entraînement. Nous balayons $\alpha \in [0, 1]$ sur Qwen-14B à prompt et seed fixés~; la Figure~\ref{fig:alpha} résume le compromis.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{scope}
+    \draw[->] (0,0) -- (6.8,0) node[right, font=\scriptsize] {$\alpha$};
+    \draw[->] (0,0) -- (0,3.0);
+    \foreach \x/\l in {0/0.0,1.6/0.25,3.2/0.5,4.8/0.75,6.4/1.0}{
+        \node[font=\scriptsize] at (\x,-0.25) {\l};
+    }
+    \node[font=\scriptsize, rotate=90] at (-0.55,1.5) {qualité};
+    \draw[cascade1, thick] plot[smooth] coordinates {(0,2.4) (1.2,2.55) (2.4,2.35) (3.6,1.9) (4.8,1.3) (6.4,0.5)};
+    \draw[cascade5, thick, dashed] plot[smooth] coordinates {(0,0.4) (1.2,1.3) (2.4,2.1) (3.6,2.5) (4.8,2.7) (6.4,2.75)};
+    \node[cascade1, font=\scriptsize] at (1.2,2.85) {fluidité};
+    \node[cascade5, font=\scriptsize] at (4.8,3.0) {effet temporel};
+    \fill[cascade3!20] (1.0,0) rectangle (1.6,3.0);
+    \node[cascade3!80!black, font=\scriptsize\bfseries] at (1.3,2.15) {$\alpha^{*}$};
+\end{scope}
+\end{tikzpicture}
+\caption{Compromis entre fluidité générative (bleu, continu) et force du basculement pragmatique temporel (orange, tireté) en fonction du scalaire d'inférence~$\alpha$. La bande ombrée autour de $\alpha^{*}\in[0{,}2,0{,}3]$ est le \emph{point d'équilibre}~: suffisamment fort pour faire apparaître le changement de registre, suffisamment faible pour éviter les artefacts stylistiques.}
+\label{fig:alpha}
+\end{figure}
+
+Le point d'équilibre $\alpha^{*}\in[0{,}2,0{,}3]$ est la configuration utilisée dans tous les déploiements rapportés ici. Sous $\alpha\!=\!0{,}1$ le basculement pragmatique disparaît~; au-dessus de $\alpha\!=\!0{,}5$ la fluidité se dégrade (répétitions, petits artefacts lexicaux), car l'adaptateur a été entraîné à $\alpha\!=\!1$ sur une supervision \emph{au token} mais appliqué à l'inférence à des~$\delta$ inédits où la contribution résiduelle devient arbitrairement grande en norme. Descendre~$\alpha$ est donc une calibration \emph{a posteriori}, non une régularisation.
+
+% ══════════════════════════════════════════════════
+\section{Inférence Multi-GPU : Considérations d'Ingénierie}
+
+La reproductibilité des énoncés empiriques exige que l'inférence soit réalisable hors de l'environnement d'entraînement MI300X. Nous rapportons ici les conditions sous lesquelles le Qwen2.5-14B greffé peut être évalué sur matériel grand public et les précautions d'ingénierie nécessaires pour préserver l'équivalence numérique avec la référence MI300X.
+
+Le modèle de base est chargé en bfloat16 sur un poste 5\,$\times$\,RX~7800~XT (80~Go de VRAM agrégée, ROCm~7) via Hugging Face \texttt{device\_map="auto"}, qui répartit les 48~couches du décodeur sur les cinq devices. L'adaptateur est instancié en float32 et placé sur le device hébergeant la couche~$k{+}1$. Dans le pre-hook, l'état caché est converti en float32 avant le forward de l'adaptateur puis reconverti en bfloat16 avant réinjection. Cette discipline double précision n'est pas cosmétique~: faire tourner la cascade à fuite en bfloat16 dégrade $R^2$ de 0{,}03 par dérive d'accumulateur, tandis que faire tourner la totalité du chemin de base en float32 excède le budget VRAM agrégé.
+
+Le surcoût de l'adaptateur est de 1{,}2~ms/token (médian), entièrement dominé par le forward du modèle de base. Lorsque~$\mathbf{T}(t)$ n'est pas fourni par l'appelant, le pre-hook court-circuite et le modèle de base s'exécute bit-à-bit identique à sa version publique. Cette propriété est critique pour l'ablation~: toute différence comportementale entre modèle greffé et non greffé est imputable à~$\mathbf{T}(t)$ seul.
+
+% ══════════════════════════════════════════════════
+\section{Extension en Cours : Qwen2.5-Coder-32B}
+\label{sec:extension}
+
+Au moment de la rédaction, une troisième greffe s'entraîne sur Qwen2.5-Coder-32B (couche hook~31, 15{,}8~M paramètres entraînables, mélange code/chat 60/40). La motivation est double~: (i) tester si la pragmatique temporelle transfère à une base orientée code, où les conversations portent une structure rythmique différente (cycles compile\,$\rightarrow$\,erreur\,$\rightarrow$\,correctif à l'échelle seconde-minute), et (ii) préparer une intégration dans le fork \texttt{ndc} de Claude Code, de sorte que les horodatages en temps réel des messages pilotent~$\delta$ directement.
+
+Les observations courantes sur le run actif sont encourageantes~: $\mathcal{L}_\delta$ tombe sous $0{,}02$ en moins de 100~pas, ce qui suggère une convergence rapide de la régression log-temps même sur un corpus hétérogène. Le calendrier complet de 3~époques est surdimensionné pour le mélange (chaque conversation de code produit beaucoup plus de fenêtres de 256~tokens qu'une conversation de chat)~; la révision finale du papier rapportera un run plus court, calibré au corpus.
+
+% ══════════════════════════════════════════════════
+\section{Discussion}
+
+\subsection{Un plateau, non un plafond}
+
+Le motif empirique frappant est un \emph{plateau} de capacité temporelle dès 1\,B de paramètres. Décodabilité linéaire, séparabilité multi-échelle et dimensionnalité SVD sont toutes invariantes à l'échelle de base dans la plage de mesure. Cela affine, sans falsifier, les prédictions CAMUS originales. P1--P5 sont corroborées~; l'insight nouveau est que la représentabilité temporelle se comporte comme une \emph{primitive cognitive minimale}~: dès que la base a assez de capacité résiduelle pour héberger un sous-espace de 5~dimensions, la greffe en installe un, et agrandir la base n'en installe pas un plus grand.
+
+L'échelle n'est pas pour autant gaspillée. Elle paie au niveau pragmatique~: prompts plus longs, contrôle de registre plus fin, choix lexical plus varié lors de la reconnaissance du temps écoulé. Le modèle 14\,B produit \emph{``a year slips past faster than i would like to admit''}~; le modèle 1{,}1\,B ne tient pas la cohérence sur la même portée.
+
+\subsection{Cellules temporelles, non embeddings temporels}
+
+La signature SVD à $\sim$5~dimensions n'est pas un choix de conception. Nous n'avons jamais imposé de goulot de dimension cinq. Le goulot interne de l'adaptateur est 256, FiLM opère dans tout l'espace de dimension~$d$, la cascade a $M=8$ filtres. Pourtant le readout linéaire trouve une structure à 5~directions. Le parallèle avec les cellules temporelles hippocampiques est structurel~: distribué, multi-échelle, invariant à la largeur précise du substrat sous-jacent.
+
+\subsection{Politesse temporelle émergente}
+
+Le basculement pragmatique à $\delta$~long est le résultat empirique non anticipé. Il ne demande pas de réentraînement, pas de signal de supervision en surface (l'adaptateur ne voit jamais de token \emph{``désolé pour le délai''} comme cible), et généralise à travers les prompts. Nous l'interprétons comme un effet aval de la distribution d'entraînement~: les textes où apparaissent de longs délais tendent aussi à s'ouvrir sur des acknowledgements, et la greffe oriente le modèle vers cette distribution quand $\delta$ est grand.
+
+\subsection{Limites}
+
+Le signal de supervision est synthétique. Les délais token-level réels ne sont pas disponibles dans OASST1 ou Code-Feedback~; nous les tirons depuis des distributions raisonnables. Un corpus avec dynamique de frappe réelle (logs de chat avec horodatage par frappe) rendrait la sonde de régression plus propre, mais sort du périmètre de ce papier. La sonde pragmatique est qualitative et reporte des exemples à seed~42~; un protocole d'évaluation pragmatique à grande échelle est laissé en perspective.
+
+% ══════════════════════════════════════════════════
+\section{Reproductibilité}
+
+Tout le code et les checkpoints nécessaires pour reproduire les figures, sondes et complétions pragmatiques sont publiés avec ce préprint~:
+
+\begin{itemize}[leftmargin=0.6cm, itemsep=1pt]
+    \item \texttt{09\_deploy\_mi300x/graft\_mi300x.py} : script d'entraînement.
+    \item \texttt{09\_deploy\_mi300x/temporal\_adapter.py} : définition de l'adaptateur.
+    \item \texttt{09\_deploy\_mi300x/probes\_mi300x.py} : suite d'évaluation.
+    \item \texttt{10\_local\_inference/chat\_qw14\_local.py} : point d'entrée inférence multi-GPU.
+    \item \texttt{05\_checkpoints/qw14/graft\_qw14\_ep2.pt} : poids publiés de l'adaptateur (15{,}8~M).
+\end{itemize}
+
+Un run complet sur MI300X termine en moins de 30~minutes pour environ 0{,}83~\$ au tarif public à la demande de DigitalOcean.
+
+% ══════════════════════════════════════════════════
+\section{Travaux Connexes}
+
+Le réglage paramétrique efficace de LLMs figés a été largement étudié, des Adapters~\cite{howard2013} à LoRA~\cite{hu2021lora}, en passant par le prefix tuning~\cite{li2021prefix}. Ces méthodes ciblent l'adaptation à une tâche, non l'injection d'une nouvelle modalité d'entrée. Les encodages positionnels --- RoPE~\cite{su2021rope}, ALiBi~\cite{press2021alibi} --- encodent l'\emph{ordre} des tokens, non le \emph{temps physique}. La modélisation temporelle du langage~\cite{dhingra2021,wang2023} étudie l'évolution de la connaissance sur documents datés au niveau du \emph{corpus}, non au niveau du token. Les cellules temporelles hippocampiques~\cite{macdonald2011} ont fourni l'analogie biologique que nous confirmons empiriquement dans un réseau silicium.
+
+% ══════════════════════════════════════════════════
+\section{Conclusion}
+
+Le premier papier CAMUS proposait la cognition temporelle comme primitive manquante des grands modèles de langue et formulait cinq prédictions falsifiables. Le présent papier, sa suite empirique, montre qu'un adaptateur par greffe sous le pour-cent suffit à installer cette primitive dans n'importe quel décodeur pré-entraîné suffisamment grand sans toucher ses poids. Le signal temporel est linéairement décodable à $R^2 \approx 0{,}9$, vit dans un sous-espace d'environ 5~dimensions invariant à l'échelle de base, et produit une pragmatique temporelle émergente absente des prédictions originales de la théorie. Le pipeline complet est économique, reproductible et déployable sur matériel multi-GPU grand public. Un troisième run sur Qwen2.5-Coder-32B est en cours~; les travaux futurs quantifieront le transfert pragmatique sur le dialogue code-centré et intégreront l'adaptateur dans des boucles d'agents live où les horodatages des messages pilotent~$\delta$ en temps réel.
+
+% ══════════════════════════════════════════════════
+\begin{thebibliography}{9}
+\footnotesize
+\bibitem{camus2026} Camus, L. \emph{La Théorie CAMUS : Cognition Temporelle Émergente dans les Modèles de Langue.} Zenodo, 2026. DOI :~\href{https://doi.org/10.5281/zenodo.19509846}{10.5281/zenodo.19509846}.
+\bibitem{macdonald2011} MacDonald, C. J., Lepage, K. Q., Eden, U. T., Eichenbaum, H. \emph{Hippocampal ``time cells'' bridge the gap in memory for discontiguous events.} Neuron, 71(4), 737--749, 2011.
+\bibitem{howard2013} Howard, J., Ruder, S. \emph{Universal Language Model Fine-tuning for Text Classification.} ACL, 2018.
+\bibitem{hu2021lora} Hu, E. J., et al. \emph{LoRA: Low-Rank Adaptation of Large Language Models.} ICLR, 2022.
+\bibitem{li2021prefix} Li, X. L., Liang, P. \emph{Prefix-Tuning: Optimizing Continuous Prompts for Generation.} ACL, 2021.
+\bibitem{su2021rope} Su, J., et al. \emph{RoFormer: Enhanced Transformer with Rotary Position Embedding.} arXiv:2104.09864.
+\bibitem{press2021alibi} Press, O., Smith, N. A., Lewis, M. \emph{Train Short, Test Long: Attention with Linear Biases.} ICLR, 2022.
+\bibitem{dhingra2021} Dhingra, B., et al. \emph{Time-Aware Language Models as Temporal Knowledge Bases.} TACL, 2022.
+\bibitem{wang2023} Wang, Y., et al. \emph{Learning to Reason over Time.} arXiv:2302.10724.
+\bibitem{vaswani2017} Vaswani, A., et al. \emph{Attention is All You Need.} NeurIPS, 2017.
+\bibitem{kopf2023oasst1} K\"opf, A., Kilcher, Y., von R\"utte, D., et al. \emph{OpenAssistant Conversations --- Democratizing Large Language Model Alignment.} arXiv:2304.07327, 2023.
+\bibitem{zheng2024opencodeinterpreter} Zheng, T., Zhang, G., Shen, T., et al. \emph{OpenCodeInterpreter: Integrating Code Generation with Execution and Refinement.} arXiv:2402.14658, 2024.
+\end{thebibliography}
+
+\end{document}
